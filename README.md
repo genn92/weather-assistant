@@ -1,4 +1,4 @@
-# 天气查询 Agent
+# 🌤️ 天气查询 Agent
 
 基于 **DeepSeek + Streamlit** 的天气查询 Agent，通过大模型的 Function Calling 能力自动调用天气工具回答用户问题。
 
@@ -39,7 +39,7 @@ OPENAI_API_BASE_URL=https://api.deepseek.com
 uv run weather-assistant
 ```
 
-启动后浏览器访问 http://localhost:8501。
+启动后浏览器访问 http://localhost:8501
 
 ## 使用方法
 
