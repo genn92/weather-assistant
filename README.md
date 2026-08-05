@@ -5,7 +5,8 @@
 ## 功能特性
 
 - 🌤️ 基于 DeepSeek Chat 模型，支持 Function Calling
-- 🔧 内置 `get_weather` 工具，实时查询指定城市天气（数据源：wttr.in）
+- 🌡️ 内置 `get_weather` 工具，实时查询当前天气
+- 📅 内置 `get_daily_forecast` 工具，按日期查询未来多天的天气预报（数据源：Open-Meteo，支持未来 16 天）
 - 💬 Streamlit 聊天界面，实时展示工具调用过程
 - ⚡ 使用 uv 管理依赖，开箱即用
 
@@ -14,6 +15,7 @@
 - Python 3.13+
 - [DeepSeek](https://platform.deepseek.com/) API（OpenAI 兼容接口）
 - [Streamlit](https://streamlit.io/)
+- [Open-Meteo](https://open-meteo.com/)（天气预报数据源，免费无 Key）
 - [uv](https://docs.astral.sh/uv/) 包管理
 
 ## 快速开始
@@ -47,8 +49,10 @@ uv run weather-assistant
 
 - 「北京今天天气怎么样？」
 - 「查询一下上海的天气」
+- 「北京明天天气怎么样？」
+- 「未来几天上海的天气如何？」
 
-Agent 会自动调用天气工具并返回查询结果。
+Agent 会自动选择合适的天气工具并返回查询结果。「明天 / 后天 / 某天」的查询由 `get_daily_forecast` 处理，支持未来 16 天内的日期。
 
 ## 项目结构
 
