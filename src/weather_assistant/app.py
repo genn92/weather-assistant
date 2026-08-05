@@ -1,3 +1,4 @@
+import datetime
 from typing import cast
 
 import streamlit as st
@@ -6,6 +7,7 @@ from openai.types.chat import ChatCompletionMessageParam
 
 from weather_assistant import config
 from weather_assistant.agent import run_agent
+from weather_assistant.tools.weather import DATE_RE, RELATIVE_FUTURE
 
 st.set_page_config(page_title="天气助手 Agent", page_icon="🌤️")
 st.title("🌤️ 天气查询 Agent")
@@ -34,6 +36,16 @@ def on_tool_call(name: str, args: dict) -> None:
     if name == "get_weather":
         with st.chat_message("assistant"):
             st.caption(f"🔧 正在查询 {args['city']} 天气...")
+    elif name == "get_forecast":
+        with st.chat_message("assistant"):
+            st.caption(f"🔧 正在查询 {args['city']} 未来 {args.get('days', '')} 天的天气...")
+    elif name == "get_daily_forecast":
+        date = args.get("date", "")
+        if date in RELATIVE_FUTURE or (
+            DATE_RE.match(date) and date > datetime.date.today().isoformat()
+        ):
+            with st.chat_message("assistant"):
+                st.caption(f"🔧 正在查询 {args['city']} {date} 的天气...")
 
 
 render_history()
