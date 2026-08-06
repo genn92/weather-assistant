@@ -12,10 +12,11 @@ ToolCallCallback = Callable[[str, dict], None]
 
 MAX_ITERATIONS = 10
 DATE_INSTRUCTION = (
-    "今天的日期是 {today}，明天是 {tomorrow}。用户问\"今天/现在/当前/实时\"天气 → "
-    "调用 get_weather；问\"明天/后天\"或具体某一天 → 直接按用户原话把\"明天\"/\"后天\""
-    "作为 date 参数传给 get_daily_forecast；问\"未来几天/未来一周\"等 → 用 get_forecast "
-    "一次性查询。不要自行换算日期，也不要向用户询问日期。"
+    '今天的日期是 {today}，明天是 {tomorrow}。用户问"今天/现在/当前/实时"天气 → '
+    '调用 get_weather；问"明天/后天"或具体某一天 → 直接按用户原话把"明天"/"后天"'
+    '作为 date 参数传给 get_daily_forecast；问"未来几天/未来一周"等 → 用 get_forecast '
+    "一次性查询。用户询问空气质量/AQI/污染时 → 用 get_air_quality 查询，可按用户原话"
+    '把"今天"/"明天"等作为 date 参数。不要自行换算日期，也不要向用户询问日期。'
 )
 
 
@@ -73,9 +74,7 @@ def run_agent(
                     on_tool_call(first.function.name, args)
                 handler = HANDLERS.get(first.function.name)
                 result = (
-                    handler(**args)
-                    if handler
-                    else f"未知工具：{first.function.name}"
+                    handler(**args) if handler else f"未知工具：{first.function.name}"
                 )
             except (TypeError, KeyError) as e:
                 result = (
@@ -103,6 +102,8 @@ def _inject_today(messages: list[ChatCompletionMessageParam]) -> None:
             if date_pat.search(content):
                 content = date_pat.sub(sentence, content)
             else:
-                content = content + DATE_INSTRUCTION.format(today=today, tomorrow=tomorrow)
+                content = content + DATE_INSTRUCTION.format(
+                    today=today, tomorrow=tomorrow
+                )
             m["content"] = content
         break
